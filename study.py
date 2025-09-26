@@ -68,6 +68,13 @@ class Study:
 		fluid_list = ['0', '1.1', '1.2', '1.3', '2.2', '2.3', '3.2', '3.3', '4.1', '4.2', '4.3']
 
 		for f in fluid_list:
+			if not f in results:	#These fluid items may or may not be present
+				#depending on the system type being studied. E.g. Filter stage 3
+				#does not exist in System Type 2.0.
+
+				continue
+
+
 			s += desire_within(results[f].concentration, 0, 30)	#Get angry if
 			#the concentration is impossible
 
@@ -82,6 +89,9 @@ class Study:
 		sign_list = ['s1', 's2', 's3', 's4']
 
 		for sign in sign_list:
+			if not sign in results:
+				continue
+
 			s += desire_below(results[sign], 0)	#All Filter Stages should have
 			#outward flow. Get angry otherwise.
 
@@ -93,6 +103,9 @@ class Study:
 		A_list = ['A1', 'A2', 'A3', 'A4']
 
 		for A in A_list:
+			if not A in results:
+				continue
+
 			s += desire_above(results[A], 0)	#Get angry if membranes have
 			#negative size.
 

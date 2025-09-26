@@ -57,10 +57,6 @@ class Study:
 	def minimize(self):
 		optimize_result = minimize(self.eval, self.params_to_list(self.params, self.select_params))
 
-		print('='*32)
-		print('Optimization report')
-		print(optimize_result)
-
 		return optimize_result
 
 	def loss(self, results):

@@ -3,47 +3,62 @@ from pretty import *
 import time
 from system_1_0 import *
 from study import *
+from specialprint import *
 
 
 if __name__ == '__main__':
-	print('\n'*10)
 	print(f'Nanofiltration System Evaluation @ {datetime.now()}')
 
-	params = {
-		'c0': .4, #% w/w
+	params = {	#List of all the unknown parameters needed to evaluate the
+	#system start to finish
+
+		'c0': .38, #% w/w
 		'Q0': 1,	#g/sec
 		'c1_3': 3,
 		'c2_3': 7,
 		'c3_3': 10
 	}
 
-	select_params = ['c1_3', 'c2_3']
+	select_params = ['c1_3', 'c2_3']	#Short list of the parameters which will
+	#be changed to optimize the result
 
-	study = Study(eval_system_1_0, params, select_params)
+	study = Study(eval_system_1_0, params, select_params)	#Create a Study to 
+	#manage the context for optimization and fetching results
 
 	print('Select parameters:', select_params)
 
-	print('Optimizing...')
-
 	study_results = study.minimize()	#Execute the optimiztaion process and
-	#fetch results
+	#fetch the results (of the optimization run)
 
-	results = study.get_results()	#Fetch the process variables
+	print('\n\n======== Optimization report ========')
+	print(study_results)
 
-	print('Optimized parameters:', study_results['x'])
+	results = study.get_results()	#Fetch the resulting process variables
 
-	print('='*32)
-	print(f'System variables')
+	print(f'\n\n======== System variables ========')
 
-	for var_name, fluid in results.items():
-		print(f'{var_name}:\t{fluid}')
+	variable_descriptions = {
+		'0': 'Raw feedstock input',
+		'3.3': 'Concentrated output',
+		'4.2': 'Dilute waste output',
+
+		'A1': 'Stage 1 membrane',
+		'A2': 'Stage 2 membrane',
+		'A3': 'Stage 3 membrane',
+		'A4': 'Stage 4 membrane',
+
+		'recycling_factor': 'Feedstock recycling factor',
+		'net_rejection': 'Overall sodium sulfate rejection'
+	}
+
+	for var_name, var_value in results.items():	#Print the system variables and
+		#Add a description to applicable entries
+
+		if var_name in variable_descriptions.keys():
+			print(f'\n{variable_descriptions[var_name]}')
+			print(f'{var_name}:\t{var_value}\n')
+
+		else:
+			print(f'{var_name}:\t{var_value}')
 
 	print()
-
-	print('System summary')
-
-	print('Stock recycling factor:', '{:.2f}'.format(results['recycling_factor']))
-	print('Overall waste sodium rejection (%): {:.2f}'.format(results['net_rejection']))
-	print('Raw feed:', results['0'])
-	print('Concentrate:', results['3.3'])
-	print('Waste permeate:', results['4.2'])

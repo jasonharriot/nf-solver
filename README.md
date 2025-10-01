@@ -5,11 +5,19 @@ Generate solutions for nanofiltration systems
 
 `py --version` or `python3 --version`
 
+-Check that git is installed
+
+`git --version`
+
+-Clone this repository
+
+`git clone https://github.com/jasonharriot/nf-solver`
+
 -Navigate to the repository directory
 
 `cd nf-solver`
 
--Create a virtual environment named with the venv package (`py -m venv <virtual environment name>`)
+-Create a virtual environment with the venv package (`py -m venv <virtual environment name>`)
 
 `py -m venv venv` or `python3 -m venv venv`
 
